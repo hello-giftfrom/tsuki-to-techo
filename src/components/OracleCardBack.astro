@@ -1,0 +1,9 @@
+---
+interface Props {number?:number;}
+const {number}=Astro.props;
+const rays=Array.from({length:8},(_,i)=>i*45);
+---
+<span class="paper-back" aria-hidden="true"><span class="back-constellation">·　☾　·</span><svg viewBox="0 0 160 190" fill="none"><rect x="9" y="8" width="142" height="174" rx="65"/><ellipse cx="80" cy="94" rx="47" ry="68"/><circle cx="80" cy="94" r="40"/><circle cx="80" cy="94" r="45"/>{rays.map(angle=><g transform={`rotate(${angle} 80 94)`}><path d="M80 34 85 89 80 94 75 89Z"/><path d="M80 34 80 94 85 89Z" fill="currentColor" stroke="none"/></g>)}<path d="M80 19v13M80 157v14M14 94h13M133 94h13M19 165c21-12 19-28 17-40M23 161c-11-5-9-12-10-17 10 3 14 9 10 17ZM32 146c11-4 13-11 14-17-11 1-15 8-14 17ZM141 165c-21-12-19-28-17-40M137 161c11-5 9-12 10-17-10 3-14 9-10 17ZM128 146c-11-4-13-11-14-17 11 1 15 8 14 17Z"/></svg><span class="back-name">月と手帳</span><span class="back-number">{number ? String(number).padStart(2,'0') : '·'}</span></span>
+<style>
+.paper-back{display:flex;position:absolute;inset:6px;flex-direction:column;align-items:center;justify-content:center;border:1px solid #b9a37f;border-radius:2px;color:#d8c39d;background:#1c3243;overflow:hidden}.paper-back:after{content:'';position:absolute;inset:4px;border:1px solid #b9a37f66;pointer-events:none}.paper-back svg{width:86%;height:67%;stroke:currentColor;stroke-width:.6;opacity:.92}.back-constellation{position:absolute;top:8px;font-size:13px;letter-spacing:3px}.back-name{font-family:var(--serif);font-size:11px;letter-spacing:.23em;margin-top:0}.back-number{font-size:9px;letter-spacing:.12em;margin-top:5px}
+</style>

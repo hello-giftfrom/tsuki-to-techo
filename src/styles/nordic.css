@@ -1,0 +1,121 @@
+/* Nordic visual system. Interaction geometry and all data-state hooks stay in immersive.css. */
+body{--gold:#b99a70;--navy:#1c3243;background:var(--paper);color:var(--ink)}
+body.immersive{--night:#172c3d;--night-deep:#122333;--moon-white:#f4efe3;--night-muted:#c2c9cf;background:var(--paper);color:var(--ink)}
+body .site-header,body.immersive .site-header{max-width:none;padding:24px clamp(22px,4vw,64px);border-bottom:1px solid #1c324310;background:var(--paper);color:var(--ink)}
+body .brand span,body.immersive .brand span{color:var(--ink);font-size:1.65rem;vertical-align:middle}
+body.immersive .site-header a:hover{color:#846745}
+body.immersive .breadcrumbs{color:var(--muted);padding-bottom:20px}
+body.immersive :focus-visible{outline-color:#a2855f}
+body .site-footer,body.immersive .site-footer{position:relative;isolation:isolate;background:linear-gradient(90deg,#122637e8,#172e40a8),url('/images/nordic-lake.webp') center 73%/cover;color:#f3eee2;text-align:left;padding:72px max(24px,calc((100vw - 1040px)/2)) 34px;border:0}
+body .site-footer .footer-intro{margin-bottom:70px}
+body .footer-intro h2{font-size:1.9rem;line-height:1.8;letter-spacing:.17em}
+body .site-footer p,body .site-footer small{color:#d6dde1}
+body .site-footer nav{justify-content:flex-start;margin:24px 0;flex-wrap:wrap}
+body .site-footer a:hover{color:#e3cba7}
+.immersive .moon-journey{background:var(--paper);overflow:clip;min-height:0}
+.nordic-landscape{position:absolute;inset:0;width:100%;height:900px;max-height:calc(100svh - 85px);object-fit:cover;object-position:50% 70%;z-index:-2}
+.immersive .moon-track{display:none}
+.immersive .night-opening{min-height:min(900px,calc(100svh - 85px));max-height:900px;padding:clamp(50px,9svh,120px) 24px 28px;position:relative;color:#152838}
+.immersive .opening-copy h1{font-size:clamp(3rem,6vw,5.5rem);letter-spacing:.2em;margin:0 0 12px .2em}
+.immersive .opening-copy p{font-size:clamp(.9375rem,1.6vw,1.2rem);letter-spacing:.13em;margin-bottom:26px}
+.opening-cta{display:inline-flex;align-items:center;justify-content:space-between;gap:30px;padding:13px 24px;background:#213b4df2;color:#fff8ea;text-decoration:none;font-family:var(--serif);font-size:.875rem;border:1px solid #526777;border-radius:3px}
+.opening-cta:hover{background:#172e40;color:#fff8ea}
+.immersive .journey-scroll{color:#fff7e5;text-shadow:0 1px 4px #102635;letter-spacing:.12em}
+.immersive .tonights-moon{min-height:0;padding:75px 24px 82px;background:var(--paper)}
+.immersive .moon-caption h2{font-size:1.7rem;line-height:1.9;margin-bottom:26px}
+.immersive .moon-caption .moon-status{border-color:var(--line);padding:20px 0}
+.immersive .moon-caption .muted,.immersive .moon-caption .moon-date span{color:var(--muted)}
+.immersive .journey-link{color:var(--ink);border-color:var(--gold)}
+.immersive .moon-whisper{display:none}
+.immersive .scene-number{color:#806749;opacity:1}
+.immersive .paper-scene{padding:80px max(24px,calc((100vw - 1080px)/2));background:#eae6db;color:var(--ink);display:grid;grid-template-columns:1fr 1.2fr;align-items:center;gap:64px}
+.immersive .paper-scene:before{display:none}
+.immersive .paper-intro{margin:0;text-align:left}
+.immersive .paper-intro h2{font-size:1.8rem}
+.immersive .paper-intro>p:last-child,.immersive .paper-note{color:#657079}
+.immersive .journal-spread{width:100%;box-shadow:8px 12px 28px #23374912;background:#d8d2c5}
+.immersive .journal-leaf{padding:35px;min-height:300px;background:repeating-linear-gradient(transparent 0 35px,#78839016 35px 36px),#f7f4eb}
+.immersive .journal-leaf a{color:#425b6a}
+.immersive .oracle-world{background:radial-gradient(ellipse at 50% 15%,#2d485960,transparent 65%),#162b3c;color:#f2edde;padding-top:65px}
+.immersive .oracle-world:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(circle at 13px 19px,#e5d3ac55 .6px,transparent 1px),radial-gradient(circle at 63px 82px,#ecf0f13b .65px,transparent 1px);background-size:137px 151px,199px 233px;mask-image:linear-gradient(#000,transparent 90%)}
+.immersive .oracle-world:after{content:'';position:absolute;z-index:-2;pointer-events:none;bottom:0;left:0;right:0;height:280px;background:linear-gradient(#162b3c,transparent 75%),linear-gradient(#16344e75,#142a3f80),url('/images/nordic-lake.webp') center 85%/cover;opacity:.65}
+.immersive .oracle-world[data-state="depart"],.immersive .oracle-world[data-state="reveal"]{background:#142738}
+.immersive .small-moon{color:#ddc6a0;font-size:32px;margin-bottom:18px}
+.immersive .oracle-invitation h1,.immersive .oracle-invitation h2{font-size:clamp(1.75rem,3vw,2.4rem)}
+.immersive .oracle-invitation p,.immersive .picker-heading p{color:#d0d8dd}
+.immersive .v2-themes legend{color:#d4c09e}
+.immersive .v2-themes span{border-color:#ddc49b45;color:#dfe4e6;padding:10px 16px;background:#152b3c55;border-radius:2px}
+.immersive .v2-themes input:checked+span{background:#ece3d0;color:#213749;border-color:#ece3d0}
+.immersive .picker-heading h2{font-size:1.6rem;letter-spacing:.12em}
+.immersive .fan-card{background:#ece4d4;border:1px solid #cfbc99;border-radius:5px;box-shadow:0 9px 24px #030f1a55}
+.immersive .fan-card[data-center="true"]{box-shadow:0 14px 28px #050e1b88}
+.immersive .fan-navigation button{color:#ead8b7;border-color:#c3b18f70}
+.immersive .fan-navigation p,.immersive .choose-footnote{color:#d4d9df}
+.lunar-ornament{text-align:center;color:#e9d5b1;letter-spacing:5px;font-size:20px;margin:30px 0 14px}
+.immersive .choose-footnote{margin-top:0;padding:0 24px 12px}
+.immersive .reveal-back,.immersive .reveal-front{background:#ede5d5;border-color:#c8b691;border-radius:5px}
+.immersive .reveal-stage>p{color:#e0d5be}
+.immersive .oracle-world[data-state="result"],.immersive .oracle-world[data-state="notebook"]{background:var(--paper);color:var(--ink)}
+.immersive .oracle-world[data-state="result"]:before,.immersive .oracle-world[data-state="result"]:after,.immersive .oracle-world[data-state="notebook"]:before,.immersive .oracle-world[data-state="notebook"]:after{display:none}
+.immersive .reading-art,body .card-page-art{background:#e9e3d5;border:1px solid #c9beaa;border-radius:5px;box-shadow:0 8px 22px #26394a0c;padding:12px}
+.immersive .reading-theme{color:#6b7074;margin-bottom:14px;font-size:.75rem}
+.immersive .reading-words header h2{color:#172d3e;letter-spacing:.15em;font-size:2.8rem}
+.immersive .reading-keyword{color:#727779;margin-bottom:24px}
+.immersive .reading-words header:after{content:'';display:block;width:30px;height:2px;background:var(--gold);margin:20px 0 26px}
+.immersive .reading-body{color:#47545d;font-family:var(--serif);line-height:2.2}
+.immersive .reading-question{background:#eae4d6;padding:25px 27px;border:0;border-radius:5px;margin:28px 0}
+.immersive .reading-question h3{color:#786247}
+.immersive .reading-question blockquote{font-size:1.2rem}
+.immersive .notebook-cta{background:#243e50;color:#f7f1e6;border-color:#243e50;border-radius:3px}
+.immersive .notebook-cta:hover{background:#314f61}
+.immersive .reading-close,.immersive .reading-links a{color:#626c74}
+.immersive .notebook-page{background:#faf7ef;box-shadow:7px 10px 0 #dfd8c9}
+.immersive .notebook-date,.immersive .notebook-page label,.immersive .notebook-note{color:#67717a}
+.immersive .notebook-page textarea{color:#273b4b;border-color:#b8b8af;background:repeating-linear-gradient(transparent 0 35px,#7c87952e 35px 36px)}
+.immersive .notebook-page textarea::placeholder{color:#737d85}
+.immersive .quiet-return{color:#455d6e}
+.immersive .v2-editorial{background:var(--paper)}
+.immersive .oracle-static-intro{color:var(--ink)}
+@media(min-width:900px){.immersive .oracle-reading{gap:60px;grid-template-columns:300px minmax(0,1fr)}.immersive .reading-art{position:sticky;top:35px}.immersive .oracle-world{padding-bottom:100px}}
+@media(max-width:640px){
+body .site-header,body.immersive .site-header{padding:16px 20px;flex-direction:row;gap:16px;flex-wrap:wrap}
+body .site-header .brand,body.immersive .site-header .brand{font-size:1rem}
+body .site-header nav,body.immersive .site-header nav{font-size:.6875rem;gap:14px}
+body.immersive .site-header nav a:nth-child(2),body.immersive .site-header nav a:last-child{display:inline}
+body .site-header .brand span{margin-right:5px}
+.nordic-landscape{height:calc(100svh - 109px);max-height:none;object-position:48% 65%}
+.immersive .night-opening{min-height:calc(100svh - 109px);max-height:none;padding:55px 20px 24px}
+.immersive .opening-copy h1{font-size:2.9rem;letter-spacing:.15em}
+.immersive .opening-copy p{font-size:.875rem;letter-spacing:.06em}
+.immersive .opening-copy{width:100%;display:flex;flex-direction:column;align-items:center;flex:1}
+.opening-cta{margin-top:auto;width:min(300px,100%);justify-content:space-between}
+.immersive .journey-scroll{padding-top:12px;font-size:.6875rem}
+.immersive .tonights-moon{padding:54px 24px 60px}
+.immersive .moon-caption h2{font-size:1.4rem}
+.immersive .paper-scene{display:block;padding:50px 24px 62px}
+.immersive .paper-intro{text-align:center;margin-bottom:30px}
+.immersive .paper-intro h2{font-size:1.45rem}
+.immersive .journal-leaf{padding:26px 22px;min-height:300px}
+.immersive .oracle-world{padding-top:45px}
+.immersive .v2-themes span{font-size:.75rem;padding:10px 11px}
+.immersive .picker-heading h2{font-size:1.4rem}
+.immersive .oracle-reading{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px 24px}
+.immersive .reading-words{display:contents}
+.immersive .reading-art{width:100%;margin:0;grid-column:1;grid-row:1;padding:8px}
+.immersive .reading-words header{grid-column:2;grid-row:1;align-self:center;margin:0;text-align:left}
+.immersive .reading-theme{text-align:left;font-size:.6875rem;line-height:1.8}
+.immersive .reading-words header h2{font-size:clamp(1.6rem,7vw,2.3rem);letter-spacing:.08em}
+.immersive .reading-keyword{font-size:.625rem;letter-spacing:.15em;margin:6px 0 0;overflow-wrap:anywhere}
+.immersive .reading-words header:after{margin:20px 0 0;width:24px}
+.immersive .reading-words>h3,.immersive .reading-words>div,.immersive .reading-words>section,.immersive .reading-words>button,.immersive .reading-words>p{grid-column:1/-1;margin:0}
+.immersive .reading-short{font-size:1.2rem;padding-top:10px}
+.immersive .reading-body{font-size:.9375rem;line-height:2.25}
+.immersive .reading-body p:last-child{margin-bottom:0}
+.immersive .reading-question{padding:22px}
+.immersive .reading-question blockquote{font-size:1.1rem}
+.immersive .reading-links{gap:18px;line-height:1.8}
+body .site-footer,body.immersive .site-footer{padding:52px 25px 30px;background-position:center,43% 75%}
+body .footer-intro h2{font-size:1.65rem}
+body .site-footer .footer-intro{margin-bottom:48px}
+}
+@media(max-width:380px){body .site-header,body.immersive .site-header{justify-content:center;gap:4px}body .site-header nav{width:100%;justify-content:center}.immersive .reading-words header h2{font-size:1.55rem}.immersive .oracle-reading{gap:22px 18px}}

@@ -1,0 +1,5 @@
+---
+interface Props { title: string }
+const {title}=Astro.props;
+---
+<nav class="breadcrumbs" aria-label="パンくず"><a href="/">ホーム</a><span aria-hidden="true"> / </span><span aria-current="page">{title}</span></nav>

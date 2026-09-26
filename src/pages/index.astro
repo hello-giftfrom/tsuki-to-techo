@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MoonJourney from '../components/MoonJourney.astro';
+import OracleExperience from '../components/OracleExperience.astro';
+import '../styles/immersive.css';
+import MoonEvents from '../components/MoonEvents.astro';
+
+---
+<Layout title="月と手帳" description="月の満ち欠けとオラクルカードをきっかけに、自分のことばを手帳へ。無料の一枚引きと、あなたに向けた小さな問い。" home immersive>
+<MoonJourney/><OracleExperience/><div class="v2-editorial">
+<section class="intro container"><div class="intro-grid"><h2>未来を当てるより、<br/>いまの心に、気づく。</h2><div><p>月を眺めて、カードを一枚。<br/>出会ったことばをしるべに、<br/>自分の中にある思いを、そっとすくう。</p><p>答えがまとまらなくても大丈夫。<br/>手帳には、今日のあなたのことばを。</p><a class="text-link" href="/oracle/">カードを選んでみる <span>↗</span></a></div></div></section>
+<section class="container section"><h2>月の節目に、手帳をひらく。</h2><MoonEvents/></section>
+<section class="container reading section"><h2>書く時間の、小さな手引き。</h2><a href="/moon/newmoon/how-to/"><span>01　新月と手帳</span><h3>新月の日、何を書こう。</h3><span aria-hidden="true">↗</span></a><a href="/journal/"><span>02　自分を知る</span><h3>まとまらない気持ちも、一行から。</h3><span aria-hidden="true">↗</span></a></section>
+</div></Layout>

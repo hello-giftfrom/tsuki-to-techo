@@ -1,0 +1,19 @@
+---
+import '../styles/global.css';
+import '../styles/nordic.css';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+interface Props {title:string; description:string; home?:boolean; immersive?:boolean;}
+const {title,description,home=false,immersive=false}=Astro.props;
+const canonical = new URL(Astro.url.pathname,Astro.site);
+---
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{home ? '月と手帳｜月をしるべに、わたしを知る。' : `${title}｜月と手帳`}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><meta property="og:title" content={`${title}｜月と手帳`}/><meta property="og:description" content={description}/><meta property="og:type" content={home?'website':'article'}/><meta property="og:url" content={canonical}/><meta property="og:site_name" content="月と手帳"/><meta property="og:locale" content="ja_JP"/><meta name="twitter:card" content="summary"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/></head>
+<body class:list={{immersive}}><a class="skip" href="#main">本文へ移動</a><header class="site-header"><a class="brand" href="/" aria-label="月と手帳 ホーム"><span aria-hidden="true">☾</span> 月と手帳</a><nav aria-label="メイン"><a href="/oracle/" aria-current={Astro.url.pathname.startsWith('/oracle/')?'page':undefined}>カードを引く</a><a href="/moon/" aria-current={Astro.url.pathname.startsWith('/moon/')?'page':undefined}>月を知る</a><a href="/journal/" aria-current={Astro.url.pathname.startsWith('/journal/')?'page':undefined}>手帳を書く</a></nav></header>
+<main id="main">{!home && <div class="container"><Breadcrumbs title={title}/></div>}<slot/></main>
+<footer class="site-footer"><div class="footer-intro"><h2>月とともに、<br/>書く時間を。</h2><p>占うだけで終わらない。<br/>あなたが自分の言葉で生きるための、<br/>小さな灯りでありたい。</p></div><a class="brand" href="/">月と手帳</a><p>答えは、あなたの中に。<br/>ここは、その声に気づくための小さな場所。</p><nav aria-label="フッター"><a href="/oracle/cards/">カードのこと</a><a href="/journal/prompts/">手帳に書く問い</a></nav><small>© 月と手帳</small></footer>
+<script>
+import {initializeAnalytics,track} from '../utils/analytics';
+initializeAnalytics();
+document.querySelectorAll<HTMLAnchorElement>('[data-moon-link]').forEach(link=>link.addEventListener('click',()=>track(link.dataset.moonLink==='newmoon'?'newmoon_click':'fullmoon_click')));
+const prompt=document.querySelector('[data-journal-prompt]');
+if(prompt) { const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){track('journal_prompt_view',{location:'page'});observer.disconnect();}});observer.observe(prompt); }
+</script></body></html>

@@ -1,0 +1,5 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {cards} from '../../../data/cards';
+---
+<Layout title="オラクルカードのことば" description="月と手帳の12枚のオラクルカード。ひらく、みつめる、うごく、やすむ。今の自分を見つめることばを集めました。"><section class="container section"><p class="eyebrow">THE CARDS</p><h1>12枚の、小さなしるべ。</h1><p>心にとまることばから、ひらいてみてください。</p><div class="card-list">{cards.map(card=><a href={`/oracle/cards/${card.slug}/`}><small>{card.keyword}</small><h2>{card.title}</h2><p>{card.shortMessage}</p></a>)}</div></section></Layout>

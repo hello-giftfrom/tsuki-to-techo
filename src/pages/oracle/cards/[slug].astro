@@ -1,0 +1,9 @@
+---
+import CardArt from '../../../components/CardArt.astro';
+import '../../../styles/immersive.css';
+import {cards} from '../../../data/cards';
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+export function getStaticPaths(){return cards.map(card=>({params:{slug:card.slug},props:{card}}));}
+const {card}=Astro.props;
+---
+<ArticleLayout title={`オラクルカード「${card.title}」｜${card.shortMessage}`} description={card.shortMessage} category={card.keyword}><div class="card-page-art"><CardArt card={card}/></div><h2>{card.shortMessage}</h2>{card.message.split('\n\n').map(paragraph=><p>{paragraph}</p>)}<h2>今日、手帳に書くなら。</h2><blockquote>{card.journalPrompt}</blockquote><h2>ほかのカードのことば</h2><ul>{cards.filter(item=>item.chapter===card.chapter && item.id!==card.id).slice(0,2).map(item=><li><a href={`/oracle/cards/${item.slug}/`}>{item.title}</a></li>)}</ul><p><a href="/oracle/cards/">カードの一覧へ</a></p></ArticleLayout>
