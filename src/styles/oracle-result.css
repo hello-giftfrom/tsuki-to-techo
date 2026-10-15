@@ -1,0 +1,58 @@
+/* Result-only rules; the homepage, card backs and choosing screen keep their styles. */
+.oracle-reading .card-illustration { margin: 0; }
+.oracle-reading .card-art-note {
+  margin: 8px 0 1px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: .625rem;
+  line-height: 1.6;
+  text-align: center;
+}
+.oracle-reading .result-body {
+  max-width: 62ch;
+  margin: 0 auto 36px;
+  font-size: 1rem;
+  line-height: 2.2;
+  overflow-wrap: anywhere;
+}
+.oracle-reading .result-body p { margin: 0 0 1.5em; }
+.oracle-reading .result-body p:last-child { margin-bottom: 0; }
+.oracle-reading .positive-message { margin-bottom: 30px; }
+.oracle-reading .message-box p { max-width: 62ch; }
+@media (max-width: 640px) {
+  .oracle-reading .result-top {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    margin-bottom: 30px;
+  }
+  .oracle-reading .result-art {
+    width: 76%;
+    max-width: 280px;
+    margin-inline: auto;
+  }
+  .oracle-reading .result-top header {
+    max-width: 100%;
+    text-align: center;
+  }
+  .oracle-reading .result-top h1,
+  .oracle-reading .result-top h2 {
+    font-size: clamp(1.75rem, 7vw, 2rem);
+    margin-bottom: 10px;
+  }
+  .oracle-reading .reading-keyword { line-height: 1.9; }
+  .oracle-reading .reading-keyword::after { margin-inline: auto; }
+  .oracle-reading .positive-message {
+    font-size: 1.125rem;
+    line-height: 1.95;
+    margin-bottom: 28px;
+    overflow-wrap: anywhere;
+  }
+  .oracle-reading .result-body {
+    font-size: .9375rem;
+    line-height: 2.2;
+    margin-bottom: 30px;
+  }
+  .oracle-reading .message-box p { font-size: .9375rem; line-height: 2.2; }
+  .oracle-reading .prompt-box blockquote { overflow-wrap: anywhere; }
+}

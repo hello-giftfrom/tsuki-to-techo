@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleCards from '../components/ArticleCards.astro';
+import {getArticles} from '../utils/articles';
+const all=await getArticles();
+const groups=[['new-moon','新月の願い事'],['full-moon','満月の手放し'],['journal','手帳の書き方'],['oracle','オラクルカード'],['essays','読みもの']];
+---
+<Layout title="読みもの｜月と手帳の小さな手引き" description="新月の願い事、満月の振り返り、手帳とジャーナリング。自分の言葉を見つけるための読みもの。" crumbs={[{name:'ホーム',url:'/'},{name:'読みもの',url:'/reading/'}]}><div class="shell reading-index"><header><p class="kicker">月と暮らす、小さな手引き</p><h1>読みもの</h1><p>気になることばから、<br/>今日のあなたにつながる一ページを。</p></header>{groups.map(([id,category])=>{const articles=all.filter(e=>e.data.category===category);return articles.length>0&&<section id={id}><h2>{category}</h2><ArticleCards articles={articles}/></section>;})}</div></Layout>

@@ -1,19 +1,23 @@
 ---
 import '../styles/global.css';
-import '../styles/nordic.css';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
-interface Props {title:string; description:string; home?:boolean; immersive?:boolean;}
-const {title,description,home=false,immersive=false}=Astro.props;
-const canonical = new URL(Astro.url.pathname,Astro.site);
+import {media,socials} from '../data/media';
+import {jsonLd,type Crumb} from '../utils/seo';
+interface Props{title:string;description:string;home?:boolean;dark?:boolean;article?:boolean;image?:string;crumbs?:Crumb[];schema?:Record<string,unknown>;}
+const {title,description,home=false,dark=false,article=false,image=media.lake.src,crumbs=[],schema}=Astro.props;
+const site=Astro.site!;const canonical=new URL(Astro.url.pathname,site).href;
+const pageTitle=home?'月と手帳｜月をしるべに、わたしを知る。':`${title}｜月と手帳`;
+const brandId=new URL('/#brand',site).href;
+const nav=[{label:'カードを引く',href:'/oracle/'},{label:'新月と満月',href:'/new-moon/'},{label:'手帳を整える',href:'/journal/'},{label:'読みもの',href:'/reading/'}];
+const graph:Record<string,unknown>[]=[{'@type':'Organization','@id':brandId,name:'月と手帳',url:site.href,description:'月とことばをきっかけに、自分を知り、手帳を書くためのWebマガジン。'},{'@type':'WebSite','@id':new URL('/#website',site).href,name:'月と手帳',url:site.href,inLanguage:'ja',publisher:{'@id':brandId}}];
+if(crumbs.length)graph.push({'@type':'BreadcrumbList',itemListElement:crumbs.map((c,i)=>({'@type':'ListItem',position:i+1,name:c.name,item:new URL(c.url,site).href}))});
+if(schema)graph.push({...schema,publisher:{'@id':brandId}});
 ---
-<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{home ? '月と手帳｜月をしるべに、わたしを知る。' : `${title}｜月と手帳`}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><meta property="og:title" content={`${title}｜月と手帳`}/><meta property="og:description" content={description}/><meta property="og:type" content={home?'website':'article'}/><meta property="og:url" content={canonical}/><meta property="og:site_name" content="月と手帳"/><meta property="og:locale" content="ja_JP"/><meta name="twitter:card" content="summary"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/></head>
-<body class:list={{immersive}}><a class="skip" href="#main">本文へ移動</a><header class="site-header"><a class="brand" href="/" aria-label="月と手帳 ホーム"><span aria-hidden="true">☾</span> 月と手帳</a><nav aria-label="メイン"><a href="/oracle/" aria-current={Astro.url.pathname.startsWith('/oracle/')?'page':undefined}>カードを引く</a><a href="/moon/" aria-current={Astro.url.pathname.startsWith('/moon/')?'page':undefined}>月を知る</a><a href="/journal/" aria-current={Astro.url.pathname.startsWith('/journal/')?'page':undefined}>手帳を書く</a></nav></header>
-<main id="main">{!home && <div class="container"><Breadcrumbs title={title}/></div>}<slot/></main>
-<footer class="site-footer"><div class="footer-intro"><h2>月とともに、<br/>書く時間を。</h2><p>占うだけで終わらない。<br/>あなたが自分の言葉で生きるための、<br/>小さな灯りでありたい。</p></div><a class="brand" href="/">月と手帳</a><p>答えは、あなたの中に。<br/>ここは、その声に気づくための小さな場所。</p><nav aria-label="フッター"><a href="/oracle/cards/">カードのこと</a><a href="/journal/prompts/">手帳に書く問い</a></nav><small>© 月と手帳</small></footer>
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{pageTitle}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><meta property="og:title" content={pageTitle}/><meta property="og:description" content={description}/><meta property="og:type" content={article?'article':'website'}/><meta property="og:url" content={canonical}/><meta property="og:image" content={new URL(image,site).href}/><meta property="og:site_name" content="月と手帳"/><meta property="og:locale" content="ja_JP"/><meta name="twitter:card" content="summary_large_image"/><link rel="icon" href="/favicon.svg" type="image/svg+xml"/><script is:inline type="application/ld+json" set:html={jsonLd({'@context':'https://schema.org','@graph':graph})}/></head>
+<body class:list={{'dark-page':dark}}><a href="#main" class="skip">本文へ移動</a><header class="site-header"><a class="brand" href="/" aria-label="月と手帳 ホーム"><span aria-hidden="true">☾</span> 月と手帳</a><nav class="desktop-nav" aria-label="メイン">{nav.map(n=><a href={n.href} aria-current={Astro.url.pathname===n.href?'page':undefined}>{n.label}</a>)}</nav><details class="site-menu"><summary aria-label="メニューを開く"><span class="menu-lines" aria-hidden="true"></span></summary><nav aria-label="メニュー">{nav.map(n=><a href={n.href}>{n.label}</a>)}<a href="/full-moon/">満月の手放し</a><a href="/about/">このサイトについて</a></nav></details></header>
+<main id="main">{crumbs.length>0&&<nav class="breadcrumbs shell" aria-label="パンくず">{crumbs.map((c,i)=><>{i>0&&<span aria-hidden="true"> / </span>}{i===crumbs.length-1?<span aria-current="page">{c.name}</span>:<a href={c.url}>{c.name}</a>}</>)}</nav>}<slot/></main>
+<footer class="site-footer"><div class="footer-top"><a class="brand" href="/"><span aria-hidden="true">☾</span> 月と手帳</a><nav aria-label="フッター">{nav.map(n=><a href={n.href}>{n.label}</a>)}<a href="/about/">このサイトについて</a></nav></div><p>月をしるべに、わたしを知る。<br/>月とことばをきっかけに、自分を知り、手帳を書くためのWebマガジン。</p>{socials.length>0&&<nav aria-label="SNS">{socials.map(s=><a href={s.url} rel="noopener noreferrer">{s.label}</a>)}</nav>}<small>© {new Date().getFullYear()} 月と手帳</small></footer>
 <script>
-import {initializeAnalytics,track} from '../utils/analytics';
-initializeAnalytics();
-document.querySelectorAll<HTMLAnchorElement>('[data-moon-link]').forEach(link=>link.addEventListener('click',()=>track(link.dataset.moonLink==='newmoon'?'newmoon_click':'fullmoon_click')));
-const prompt=document.querySelector('[data-journal-prompt]');
-if(prompt) { const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){track('journal_prompt_view',{location:'page'});observer.disconnect();}});observer.observe(prompt); }
+import {initializeAnalytics} from '../utils/analytics';initializeAnalytics();
+const menu=document.querySelector<HTMLDetailsElement>('.site-menu');
+menu?.addEventListener('keydown',event=>{if(event.key==='Escape'){menu.open=false;menu.querySelector('summary')?.focus();}});
 </script></body></html>

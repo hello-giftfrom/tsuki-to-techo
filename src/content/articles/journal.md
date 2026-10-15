@@ -1,7 +1,15 @@
 ---
 title: "一行から、手帳を書く"
 description: "手帳に書くことがない日も、自分の気持ちを知るきっかけに。気軽に始めるジャーナリングの手引き。"
-category: "JOURNAL"
+slug: "journal"
+category: "手帳の書き方"
+publishedAt: "2026-09-30"
+updatedAt: "2026-09-30"
+author: "月と手帳"
+image: "journal"
+featured: true
+related: ["journal/prompts", "oracle/guide"]
+sources: []
 ---
 
 ## きれいに書くより、今のことばで

@@ -1,7 +1,15 @@
 ---
 title: "新月の願い事、ノートへの書き方"
 description: "新月に何を書けばいいか迷ったら。願いを自分のことばにする3つの手順と、手帳に書く例文を紹介します。"
-category: "NEW MOON / HOW TO"
+slug: "new-moon/how-to"
+category: "新月の願い事"
+publishedAt: "2026-09-30"
+updatedAt: "2026-09-30"
+author: "月と手帳"
+image: "journal"
+featured: true
+related: ["new-moon", "journal"]
+sources: []
 ---
 
 ## 1. 今の自分を、そのまま書く
@@ -20,4 +28,4 @@ category: "NEW MOON / HOW TO"
 
 できなかった日は、書き直してかまいません。願いは、今の自分を知る手がかりです。
 
-[新月の手帳へ戻る](/moon/newmoon/)
+[新月の手帳へ戻る](/new-moon/)

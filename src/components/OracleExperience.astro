@@ -1,28 +1,18 @@
 ---
-import {cards,themes} from '../data/cards';
-import CardArt from './CardArt.astro';
+import {cards} from '../data/cards';
+import {media} from '../data/media';
 import OracleCardBack from './OracleCardBack.astro';
-import NotebookTransition from './NotebookTransition.astro';
-interface Props {standalone?:boolean;}
-const {standalone=false}=Astro.props;
+import OracleResult from './OracleResult.astro';
+import ArticleCards from './ArticleCards.astro';
+import {getArticles} from '../utils/articles';
+const articles=(await getArticles()).filter(e=>['journal','journal/prompts'].includes(e.data.slug));
+const names=['上段の左のカード','上段の中央のカード','上段の右のカード','下段の左のカード','下段の右のカード'];
 ---
-<section class="oracle-world" data-oracle data-state="choose" id="oracle-experience" aria-label="オラクルカードと手帳">
-<div class="oracle-choose" data-choose>
-<header class="oracle-invitation"><span class="small-moon" aria-hidden="true">☾</span>{standalone ? <h1>今日のあなたへ。</h1> : <h2>今日のあなたへ。</h2>}<p>少しだけ、今日のことを<br class="mobile-break"/>思い浮かべてください。</p></header>
-<fieldset class="v2-themes"><legend>いま、心にあること</legend><div>{themes.map((theme,i)=><label><input type="radio" name="oracle-theme" value={theme} checked={i===0}/><span>{theme}</span></label>)}</div></fieldset>
-<div class="picker-heading"><h2>心にとまった一枚を</h2><p id="picker-instructions">左右になぞって、気になる一枚を。<br/>真ん中のカードをタップ、または上へ。</p></div>
-<div class="fan-stage" data-fan aria-describedby="picker-instructions">{cards.map((card,i)=><button type="button" class="fan-card" data-fan-card data-id={card.id} data-slug={card.slug} tabindex={i===5?0:-1} aria-label={`${i+1}枚目のカード${i===5?'を選ぶ':'を中央へ'}`} style={`--initial-offset:${i-5}`}><OracleCardBack number={i+1}/></button>)}</div>
-<div class="fan-navigation"><button type="button" data-previous aria-label="前のカードを中央へ">←</button><p data-position aria-live="polite">6 / {cards.length}</p><button type="button" data-next aria-label="次のカードを中央へ">→</button></div>
-<div class="lunar-ornament" aria-hidden="true">☽　◐　●　◑　☾</div><p class="choose-footnote">正解はありません。心にとまる一枚を。</p>
-</div>
-<div class="reveal-stage" data-reveal hidden role="status" aria-label="カードをひらいています"><div class="reveal-card" data-reveal-card><div class="reveal-back"><OracleCardBack/></div><div class="reveal-front" data-reveal-front></div></div><p>ことばに、耳を澄ませて。</p></div>
-<div class="oracle-results" data-results hidden>
-{cards.map(card=><article class="oracle-reading" data-reading={card.id} hidden aria-labelledby={`result-${card.slug}`}><div class="reading-art" data-front><CardArt card={card}/></div><div class="reading-words"><header><p class="reading-theme" data-reading-theme></p><h2 id={`result-${card.slug}`} tabindex="-1">{card.title}</h2><p class="reading-keyword">{card.keyword}</p></header><h3 class="reading-short">{card.shortMessage}</h3><div class="reading-body">{card.message.split('\n\n').map(paragraph=><p>{paragraph}</p>)}</div><section class="reading-question"><h3>今日の問い</h3><blockquote data-question>{card.journalPrompt}</blockquote></section><button class="notebook-cta" type="button" data-open-notebook>この問いを手帳に残す <span aria-hidden="true">↗</span></button><p class="reading-close">ここで画面を閉じて、手帳にひとこと。<br/>あなたのペースで、書いてみてください。</p><div class="reading-links"><a href={`/oracle/cards/${card.slug}/`}>このカードのことばを読む</a><a href="#oracle-experience" data-reset>別のテーマで引く</a></div></div></article>)}
-</div>
-<NotebookTransition/>
-<noscript><p class="oracle-noscript">カードを動かす体験にはJavaScriptが必要です。<a href="/oracle/cards/">カードのことばを読む</a>こともできます。</p></noscript>
+<section class="oracle-world" data-oracle data-state="choose" style={`--lake:url('${media.lake.src}')`}>
+<div class="oracle-choose" data-choose><header class="oracle-invitation"><div class="tiny-star" aria-hidden="true">✧</div><h1>心にとまった一枚を</h1><p>聞きたいことを、ひとつ心に思い浮かべてください。<br/>準備ができたら、心にとまった一枚を選んでください。</p></header>
+<div class="five-cards" aria-label="裏向きのカードから選ぶ">{names.map(name=><button type="button" class="draw-card" data-draw aria-label={name} disabled><OracleCardBack/></button>)}</div>
+<p class="draw-status" data-status role="status" aria-live="polite">カードを準備しています。</p><div class="lunar-ornament" aria-hidden="true">☽　◐　●　◑　☾</div><p class="choose-footnote">どの一枚も、<br/>いまのあなたと向き合う、小さなしるべ。</p>
+<noscript><p class="noscript-message">カード選択にはJavaScriptが必要です。<br/><a href="/journal/prompts/">手帳に書く問いを読む</a></p></noscript></div>
+<div class="oracle-results" data-results hidden>{cards.map(card=><OracleResult card={card} interactive/>)}<section class="related"><h2>関連する読みもの</h2><ArticleCards articles={articles}/></section></div>
 </section>
-<script>
-import {initOracle} from '../scripts/oracle';
-document.querySelectorAll<HTMLElement>('[data-oracle]').forEach(initOracle);
-</script>
+<script>import {initOracle} from '../scripts/oracle';document.querySelectorAll<HTMLElement>('[data-oracle]').forEach(initOracle);</script>

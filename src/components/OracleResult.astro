@@ -1,0 +1,31 @@
+---
+import type {OracleCard} from '../data/cards';
+import CardArt from './CardArt.astro';
+import '../styles/oracle-result.css';
+interface Props{card:OracleCard;interactive?:boolean;}
+const {card,interactive=false}=Astro.props;
+const Heading=interactive?'h2':'h1';
+---
+<article class="oracle-reading" data-reading={interactive?card.id:undefined} hidden={interactive} aria-labelledby={`result-${card.slug}`}>
+  <div class="result-top">
+    <div class="result-art"><CardArt card={card} eager={!interactive}/></div>
+    <header>
+      <Heading id={`result-${card.slug}`} tabindex="-1">{card.title}</Heading>
+      <p class="reading-keyword">{card.keyword}</p>
+    </header>
+  </div>
+  <p class="positive-message">{card.affirmation}</p>
+  <div class="result-body">{card.message.split('\n\n').map(paragraph=><p>{paragraph}</p>)}</div>
+  <section class="message-box">
+    <h2>カードからのメッセージ</h2>
+    {card.cardMessage.split('\n\n').map(paragraph=><p>{paragraph}</p>)}
+  </section>
+  <section class="prompt-box" data-journal-prompt>
+    <h2>今日、手帳に書くなら。</h2>
+    <blockquote>{card.journalPrompt}</blockquote>
+  </section>
+  <p class="reading-close">ここで画面を閉じて、手帳にひとこと。<br/>あなたのペースで、書いてみてください。</p>
+  {interactive
+    ?<button type="button" class="quiet-redraw" data-reset>もう一度引く <span aria-hidden="true">→</span></button>
+    :<a class="quiet-redraw" href="/oracle/">今日のカードを引く <span aria-hidden="true">→</span></a>}
+</article>

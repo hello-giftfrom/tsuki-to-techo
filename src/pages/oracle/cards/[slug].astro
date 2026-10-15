@@ -1,9 +1,11 @@
 ---
-import CardArt from '../../../components/CardArt.astro';
-import '../../../styles/immersive.css';
 import {cards} from '../../../data/cards';
-import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import Layout from '../../../layouts/Layout.astro';
+import OracleResult from '../../../components/OracleResult.astro';
+import ArticleCards from '../../../components/ArticleCards.astro';
+import {getArticles} from '../../../utils/articles';
+import {media} from '../../../data/media';
 export function getStaticPaths(){return cards.map(card=>({params:{slug:card.slug},props:{card}}));}
-const {card}=Astro.props;
+const {card}=Astro.props;const articles=(await getArticles()).filter(e=>['journal','journal/prompts'].includes(e.data.slug));
 ---
-<ArticleLayout title={`オラクルカード「${card.title}」｜${card.shortMessage}`} description={card.shortMessage} category={card.keyword}><div class="card-page-art"><CardArt card={card}/></div><h2>{card.shortMessage}</h2>{card.message.split('\n\n').map(paragraph=><p>{paragraph}</p>)}<h2>今日、手帳に書くなら。</h2><blockquote>{card.journalPrompt}</blockquote><h2>ほかのカードのことば</h2><ul>{cards.filter(item=>item.chapter===card.chapter && item.id!==card.id).slice(0,2).map(item=><li><a href={`/oracle/cards/${item.slug}/`}>{item.title}</a></li>)}</ul><p><a href="/oracle/cards/">カードの一覧へ</a></p></ArticleLayout>
+<Layout title={`オラクルカード「${card.title}」`} description={card.affirmation} image={media.oracle.src} crumbs={[{name:'ホーム',url:'/'},{name:'カードを引く',url:'/oracle/'},{name:card.title,url:Astro.url.pathname}]}><div class="oracle-results static-result"><OracleResult card={card}/><section class="related"><h2>関連する読みもの</h2><ArticleCards articles={articles}/></section></div></Layout>

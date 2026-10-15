@@ -1,23 +1,30 @@
 ---
+import {isPlaceholderImage} from '../utils/oracle-art.mjs';
 import type {OracleCard} from '../data/cards';
-interface Props {card: OracleCard;}
-const {card}=Astro.props;
+import {media} from '../data/media';
+interface Props {card:OracleCard;eager?:boolean;}
+const {card,eager=false}=Astro.props;
 const files=import.meta.glob('/public/images/oracle/*.{webp,png,jpg,avif}');
-const custom=Object.keys(files).some(path=>path === `/public${card.image}`);
-const variant=card.artwork;
+const custom=Object.keys(files).includes(`/public${card.image}`);
+const source=custom?card.image:media.oracle.src;
+// Compare actual bytes so replacing a file also removes the provisional-image label.
+const placeholder=!custom||isPlaceholderImage(source,media.oracle.src);
 ---
-<div class="oracle-art" data-art={variant}>
-{custom ? <img src={card.image} width="600" height="720" loading="lazy" decoding="async" alt={`${card.title}のイラスト`}/> : <svg viewBox="0 0 240 290" fill="none" aria-hidden="true">
-<path class="art-arch" d="M24 270V112a96 96 0 0 1 192 0v158"/>
-{variant===0 && <><circle cx="120" cy="111" r="43" class="art-disc"/><path d="M52 227h136M66 236h108M82 245h76"/><path d="M120 178v27"/></>}
-{variant===1 && <><circle cx="137" cy="88" r="29" class="art-disc"/><path d="M118 250c-8-58 27-90 11-138M122 208c-38 0-48-23-47-38 30 1 45 15 47 38ZM125 178c34-3 44-22 44-37-28 1-42 19-44 37ZM130 148c-25-3-34-16-33-29 20 0 31 12 33 29Z"/></>}
-{variant===2 && <><circle cx="120" cy="121" r="40" class="art-disc"/><path d="M40 216c40-12 120 12 160 0M54 232c40-12 92 12 132 0M73 248c30-6 64 6 94 0"/></>}
-{variant===3 && <><path class="art-disc" d="M145 62a52 52 0 1 0 27 92 56 56 0 0 1-27-92Z"/><path d="M47 201c40-31 89 26 146-10M62 222c33-17 73 14 119-4M89 244c21-10 42 8 64-3"/></>}
-{variant===4 && <><path d="M82 234V120a38 38 0 0 1 76 0v114Z"/><circle cx="120" cy="129" r="23" class="art-disc"/><path d="M103 164v52M120 171v45M137 164v52M61 246h118"/></>}
-{variant===5 && <><path class="art-disc" d="M74 170a46 46 0 0 1 92 0Z"/><path d="M43 182h154M56 199h128M73 216h94M120 72v24M70 94l16 17M170 94l-16 17"/></>}
-<circle cx="120" cy="272" r="2"/>
-</svg>}
-</div>
-<style>
-.oracle-art{width:100%;aspect-ratio:24/29;position:relative;color:#344e60;--disc:#c6af8a}.oracle-art[data-art="1"]{--disc:#c7ba9f}.oracle-art[data-art="2"]{--disc:#c9b28b;color:#425a6a}.oracle-art[data-art="3"]{--disc:#a5b3bd;color:#354f63}.oracle-art[data-art="4"]{--disc:#d3c2a0;color:#746b55}.oracle-art[data-art="5"]{--disc:#c9b599;color:#796d5b}.oracle-art svg,.oracle-art img{display:block;width:100%;height:100%;position:absolute;inset:0;object-fit:contain}.oracle-art svg{stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round}.art-arch{opacity:.36}.art-disc{fill:var(--disc);stroke:none}
-</style>
+<figure class="card-illustration">
+  <div class="oracle-art" style={`aspect-ratio:${placeholder?'2 / 3':'1 / 1'}`}><img src={source} alt={placeholder?`共通の仮イラスト：${media.oracle.alt}`:`${card.title}のイラスト`} width={placeholder?700:512} height={placeholder?1050:512} loading={eager?'eager':'lazy'} decoding="async" data-fallback={media.oracle.src} data-fallback-alt={`共通の仮イラスト：${media.oracle.alt}`}/></div>
+  <figcaption class="card-art-note" hidden={!placeholder}>共通の仮イラスト</figcaption>
+</figure>
+<script>
+function fallback(img:HTMLImageElement){
+  if(img.dataset.fallback&&img.getAttribute('src')!==img.dataset.fallback){
+    img.src=img.dataset.fallback;
+    img.alt=img.dataset.fallbackAlt||'共通の仮イラスト';
+    const note=img.closest('figure')?.querySelector<HTMLElement>('figcaption');
+    if(note)note.hidden=false;
+  }
+}
+document.querySelectorAll<HTMLImageElement>('img[data-fallback]').forEach(img=>{
+  img.addEventListener('error',()=>fallback(img));
+  if(img.complete&&img.naturalWidth===0)fallback(img);
+});
+</script>

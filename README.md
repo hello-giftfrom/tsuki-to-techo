@@ -1,105 +1,106 @@
-# 月と手帳
+# 月と手帳 v0.2
 
-月のリズムとオラクルカードをきっかけに、自分のことばを手帳へ残すための日本語サイトです。AstroとTypeScriptによる静的生成で、生成り・濃紺・ゴールドを基調にした北欧の湖畔のUIを採用しています。
+「月をしるべに、わたしを知る。」北欧のWebマガジンと、カードのことばを手帳へ持ち帰るための小さなオラクル体験。Astro / TypeScriptによる静的サイトです。
 
-## 実装内容
+## v0.2の内容
 
-- TOPと `/oracle/` で共通の12枚のオラクルカード体験
-- 6つのテーマ選択、カードのシャッフル、左右ドラッグ・ボタン・キーボード操作、中央カードの選択と反転
-- カードのことばと「今日の問い」、問いを引き継ぐ手帳入力画面
-- カード一覧・個別ページ、月と手帳のMarkdown記事
-- title・description・canonical・OGP、サイトマップとrobots.txt
-- モバイル対応、動きを減らす設定への対応
+- 湖畔の大きなビジュアル、4つの入口、新着記事、編集部おすすめ、ブランド紹介を備えたTOP。
+- テーマ選択を経ず、同じ裏面の5枚から選ぶオラクル。配るたびに36枚をシャッフルします。
+- 結果はカード画像・名前・keyword → 短いことば → メッセージ → 手帳への問い。再ドローは控えめなリンクボタン。
+- 正式な4章・各9枚。章・IDは内部データで、カードに番号は表示しません。
+- Markdown記事6本、目次、関連記事、著者名・日付・出典欄、SEO metadata / JSON-LD。
+- ログイン・履歴保存・テーマ別分岐・未確認の月情報はありません。
 
-テーマは問いの文脈として表示し、デッキの絞り込みは行いません。章はデータに保持し、結果画面には表示しません。手帳の入力は画面内だけに保持し、サーバー送信や永続保存はしません。カードと手帳の往復では保持し、別テーマへ戻るかページを離れると消えます。
+## 開発・確認
 
-## 開発環境
-
-Node.js 22.12以上（確認環境：24.20）、npmを使用します。依存のバージョンは `package-lock.json` で固定します。
+Node.js 22.12以上、npmを使用します。依存はlockfileで固定し、v0.2では追加していません。
 
 ```sh
 npm ci
 npm run dev
-```
-
-開発サーバーのURLはターミナルに表示されます。
-
-```sh
 npm run check
 npm run build
+python3 scripts/check-site.py
+node scripts/check-oracle.mjs
 npm run preview
 ```
 
-`build` は `dist/` に静的サイトを生成します。`preview` は生成済みサイトのローカル確認用です。必要に応じて `ASTRO_TELEMETRY_DISABLED=1` を指定できます。
+`dist/` に46ページを出力します。検証スクリプトは生成HTML、内部リンク、画像、目次、JSON-LD、サイトマップとリダイレクトを確認します。記事数を増やす際はスクリプト内の期待件数も更新してください。ブラウザーの視覚確認を代替するものではありません。
 
-## 環境変数
+## ブラウザー確認
 
-```sh
-cp .env.example .env
-```
+通常のターミナルから `bash scripts/check-browser.sh` を実行すると、PC 1440px・スマートフォン390px/360px/320pxのTOP、カード選択、結果、記事、読みものを確認し、`qa-output/` に画面と結果JSONを保存します。カードのキーボード操作、再ドロー、画像欠け、横はみ出しに加え、全36枚の結果本文とスマホの縦一列配置も検証します。
 
-`.env` と環境別の `.env.*` はGit管理対象外です。`.env.example` には公開可能なサンプル値だけを置きます。秘密鍵・APIキーをソースに直接書かないでください。Astroの `PUBLIC_` 接頭辞の変数はブラウザーへ公開されるため、秘密情報には使用しません。
+これは開発用の外部Playwrightを使い、プロジェクト依存には追加しません。現在の環境ではCodexの共有ランタイムと `/private/tmp/tsuki-browser` に取得したブラウザーを使用します。他の環境では `PLAYWRIGHT_MODULE` と `PLAYWRIGHT_BROWSERS_PATH` を設定してください。先に `npm run build` を実行してください。スクリプト自身がローカルの空きポートで配信を開始・終了します。結果ファイルはGit管理外です。
 
-| 変数 | 用途 | 初期状態 |
-| --- | --- | --- |
-| `SITE_URL` | canonical・OGP・sitemap・robotsの基準URL | `https://example.com` |
-| `PUBLIC_GA4_ID` | 任意のGA4測定ID | 未設定・計測無効 |
+## 公開・Cloudflare Pages
 
-現在の `astro.config.mjs` は `process.env.SITE_URL` を参照します。サイトを公開するときは、ホスティングのビルド環境変数または以下のようにシェルで実ドメインを設定してください。`.env` への記入だけに依存しないでください。
+既存の `astro.config.mjs` とビルドコマンドを維持しています。Cloudflare Pagesの静的配信を想定し、ビルドは `npm run build`、出力は `dist`。管理画面側の設定や本番デプロイは今回変更・検証していません。
+
+| 変数 | 用途 |
+| --- | --- |
+| `SITE_URL` | canonical・OGP・sitemap・robotsの公開ドメイン。未指定時は `https://example.com` |
+| `PUBLIC_GA4_ID` | 任意のGA4測定ID。未指定時は計測しません |
+
+`astro.config.mjs` は `process.env.SITE_URL` を参照します。Cloudflareのビルド環境変数を確認してください。`.env` への記入だけには依存しません。
 
 ```sh
 SITE_URL=https://your-domain.example npm run build
 ```
 
-実際の公開ドメイン・ホスティングは未設定です。GitHubへのソース公開とWebサイトのデプロイは別です。ルートパスでの公開を想定しており、GitHub Pagesのリポジトリ配下への公開には別途baseパスの検討が必要です。
+GA4はカードIDと表示位置だけを対象とし、自動page_viewは無効です。秘密情報を `PUBLIC_` 変数に入れないでください。`.env` / `node_modules` / `dist` / `.astro` はGit管理外です。
 
-GA4を利用するときは `.env` に測定IDを設定し、再ビルドします。未設定の場合、GA4スクリプトの読み込み・イベント送信は行いません。送信パラメーターは定義済みテーマ・カードID・表示位置だけで、手帳の入力は送信しません。自動page_viewは無効です。
+`public/_redirects` を出力へ同梱し、旧 `/moon/` と旧新月・満月記事、旧カード一覧を301転送します。カード個別URLは維持しています。Astro previewや一般のローカルHTTPサーバーはCloudflareの `_redirects` を適用しません。
 
-## ディレクトリ
+## 主なファイル
 
-```text
-src/
-  assets/           背景画像のマスター
-  components/       月・カード・手帳のUI
-  content/articles/ Markdown記事
-  data/             カードと月情報
-  layouts/          共通レイアウトとSEO
-  pages/            ページ・sitemap・robots
-  scripts/oracle.ts カード操作と画面遷移
-  styles/           共通・体験・北欧UIのスタイル
-  utils/analytics.ts 計測処理
-public/
-  favicon.svg
-  images/           最適化背景・カード画像
-```
+| ファイル | 内容 |
+| --- | --- |
+| `src/pages/index.astro` | TOP |
+| `src/components/OracleExperience.astro` | 5枚の選択画面 |
+| `src/components/OracleResult.astro` | 結果・手帳への問い |
+| `src/scripts/oracle.ts` | シャッフル、フリップ、再ドロー |
+| `src/data/cards.ts` | 36枚のデータ |
+| `src/data/media.ts` | 共通画像パス・将来のSNSリンク |
+| `src/styles/global.css` | 色、余白、レスポンシブUI |
+| `src/content.config.ts` | 記事の型と検証 |
+| `src/content/articles/` | 記事Markdown |
+| `src/layouts/ArticleLayout.astro` | 記事・目次・関連記事・BlogPosting |
+| `src/layouts/Layout.astro` | ナビ・フッター・共通SEO |
 
-`node_modules/`、`dist/`、`.astro/`、ローカル環境ファイルはコミットしません。
+## カード画像の差し替え
 
-## カードと画像の追加
+2026-10-10に、36枚すべてをユーザー提供ZIPの個別WebP画像（512×512px）へ差し替えました。各カードの `public/images/oracle/[slug].webp` は実在するファイルです。正式画像へ置き換えて再ビルドすると、そのカードだけ差し替わります。例：余白は `public/images/oracle/yohaku.webp`。
 
-`src/data/cards.ts` のseedsに、一意のslug、タイトル、章、英語keyword、短文、本文、問いを追加します。IDは配列位置から生成するため、既存順序を変更せず末尾へ追加します。本文の段落は `\n\n` で区切ります。
+個別画像は正方形1:1、`object-fit: contain`。共通の仮画像へ戻る場合の画像枠は従来の2:3です。スマホでは本文幅の76%・最大280pxで中央に置き、その下にカード名、keywordを表示します。共通仮画像と同じファイル内容の場合は「共通の仮イラスト」と表示し、別の画像に交換するとラベルも自動で外れます。未配置・読み込み失敗時は共通画像へ戻ります。PNG/JPG/AVIFを使う場合はimageパスも変更してください。
 
-章は「ひらく」「みつめる」「うごく」「やすむ」の4つ。現在12枚で、36枚すべての原稿は未作成です。個別ページ `/oracle/cards/[slug]/` とサイトマップはデータから生成します。
+共通画像は `src/data/media.ts` で管理します。新たな画像生成や一覧画像からの切り出しは行っていません。既存の生成画像の記録は [docs/IMAGES.md](docs/IMAGES.md) を参照。
 
-画像は `public/images/oracle/[slug].webp` に配置して再ビルドします。別形式を使用するときはデータのimageパスも変更します（WebP・PNG・JPG・AVIF）。固定比率24:29、`object-fit: contain` で表示します。未配置時は既存のSVG線画を表示します。正式なカード固有のイラストは未配置です。
+カード本文は `src/data/cards.ts` の36個のオブジェクトで管理します。IDは明示的な数値として固定し、slug・正式タイトル・keyword・章を維持しています。本文フィールドは `affirmation`（短い肯定文）、`message`（受容から始まる本文）、`cardMessage`（補足のメッセージ）、`journalPrompt`（問い一つ）。章は内部分類です。
 
-湖畔背景は生成画像をWebPへ最適化したものです。マスターは `src/assets/nordic-lake.png`、配信用は `public/images/nordic-lake.webp`。生成方法・プロンプトは [NORDIC-UI.md](NORDIC-UI.md) に記載しています。
+前回の本文・UI変更と当時の仮画像一覧は [docs/ORACLE-RESULT-UPDATE.md](docs/ORACLE-RESULT-UPDATE.md) を参照してください。
 
 ## 記事の追加
 
-`src/content/articles/` にMarkdownを追加します。frontmatterには `title`・`description`・`category` を指定します。たとえば `moon/newmoon/calendar.md` は `/moon/newmoon/calendar/` になります。既存固定ページと同じパスは使用しないでください。
+1. [docs/article-template.md](docs/article-template.md) のfrontmatterを参考に `src/content/articles/` へMarkdownを追加。
+2. `slug` が公開URLになります。ファイルの保存階層とは独立しています。
+3. `title`、`description`、`slug`、`category`、`publishedAt`、`author`、`image` を指定。`updatedAt` は任意。
+4. `related` は記事のslugを指定。重複slug、予約済みURL、存在しない関連記事、公開日より前の更新日はビルドでエラーになります。
+5. `draft: true` は一覧・個別ページ・サイトマップから除外。公開時にfalseへ。
+6. `featured: true` は「今、読んでほしい読みもの」への手動推薦。アクセス数ランキングではありません。
 
-## 月情報と未実装項目
+新着記事は公開日降順。imageには `lake` / `journal` / `oracle` のキーを指定します。新しい写真はmediaと記事schemaのimage候補に追加してください。SNSリンクはmedia.tsのsocialsへ実在するURLだけを設定します。
 
-月相・月齢・次の新月／満月のデータは未登録で「確認中」と表示します。不正確な独自計算は行いません。背景や月の装飾は当日の天文情報ではありません。日付は日本時間で更新します（JavaScript無効時はビルド時の日付）。データの追加先は `src/data/moon.ts` です。
+出典は `sources`、実際の一次記録は `firsthandNote` で掲載できます。ない情報を生成して補わないでください。著者は現在「月と手帳」名義のOrganization。個人を追加するときはschema・表示を合わせて更新します。
 
-今後の対象は、出典のある月情報、36枚の原稿・画像、実機での追加検証などです。会員機能・永続保存・広告・OGP画像は未実装です。
+## 月情報とサンプル記事
 
-## 確認記録
+天文計算や未検証の新月・満月時刻は実装していません。新月記事のカレンダー・星座・次回日時は内部TODOです。確認できる情報がそろうまでは見出しやtitleでもカレンダーを提供すると約束しません。背景の月は天文情報ではありません。
 
-- [NORDIC-UI.md](NORDIC-UI.md)：現在の北欧UIと検証記録
-- [V2-PROTOTYPE.md](V2-PROTOTYPE.md)：カード・手帳体験の実装記録
-- [MOON-RESEARCH.md](MOON-RESEARCH.md)：正確な月情報の実装候補
-- [QA.md](QA.md)：初期MVPの確認記録
+6本の記事は編集用の初期原稿です。公開・更新日はv0.2作業日を設定しています。実公開時には本文と公開日を確認してください。
 
-公開準備時に `npm run check` と `npm run build` を実行してください。
+## 作業記録
+
+- [docs/V0.2-REPORT.md](docs/V0.2-REPORT.md)：変更一覧、検証結果、残る確認事項
+- [MOON-RESEARCH.md](MOON-RESEARCH.md)：将来の正確な月情報の実装候補
+- `NORDIC-UI.md`、`V2-PROTOTYPE.md`、`QA.md` は旧版の履歴です。現在の仕様はこのREADMEとv0.2レポートを参照してください。

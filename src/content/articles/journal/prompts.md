@@ -1,7 +1,15 @@
 ---
 title: "今日、手帳に書く問い"
 description: "ジャーナリングのお題を探している日に。自分を知るための、やさしい6つの質問を集めました。"
-category: "JOURNAL / PROMPTS"
+slug: "journal/prompts"
+category: "手帳の書き方"
+publishedAt: "2026-09-30"
+updatedAt: "2026-09-30"
+author: "月と手帳"
+image: "journal"
+featured: false
+related: ["journal", "new-moon/how-to"]
+sources: []
 ---
 
 ## 今の気持ちを知る

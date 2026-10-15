@@ -1,0 +1,8 @@
+---
+import type {Article} from '../utils/articles';
+import {dateLabel} from '../utils/articles';
+import {media} from '../data/media';
+interface Props{articles:Article[];compact?:boolean;}
+const {articles,compact=false}=Astro.props;
+---
+<div class:list={['article-grid',{compact}]}>{articles.map(({data})=><a class="article-card" href={`/${data.slug}/`}><img {...media[data.image]} loading="lazy" decoding="async"/><div><span class="article-category">{data.category}</span><h3>{data.title}</h3><time datetime={data.publishedAt.toISOString()}>{dateLabel(data.publishedAt)}</time></div></a>)}</div>

@@ -1,6 +1,0 @@
-<div class="moon-events">{(['newmoon','fullmoon'] as const).map((type,i)=><section data-moon-event={type}><span class="phase-symbol" aria-hidden="true">{i===0?'●':'○'}</span><div><p class="eyebrow">{i===0?'NEW MOON':'FULL MOON'}</p><h3>次の{i===0?'新月':'満月'}</h3><p class="muted" data-event-detail>日付・{i===0?'星座・':''}あと何日：確認中</p><a class="text-link" href={`/moon/${type}/`} data-moon-link={type}>{i===0?'新月':'満月'}の手帳をひらく <span>↗</span></a></div></section>)}</div>
-<script>
-import {getMoonStatus} from '../data/moon';
-function refresh(){const now=new Date();const s=getMoonStatus(now);document.querySelectorAll<HTMLElement>('[data-moon-event]').forEach(el=>{const event=el.dataset.moonEvent==='newmoon'?s.nextNew:s.nextFull;const detail=el.querySelector('[data-event-detail]')!;if(!event){detail.textContent=`日付・${el.dataset.moonEvent==='newmoon'?'星座・':''}あと何日：確認中`;return;}const days=Math.ceil((Date.parse(event.at)-now.getTime())/86400000);detail.textContent=`${new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'}).format(new Date(event.at))} / あと${days}日${event.zodiac?' / '+event.zodiac:''}（出典：${event.source}）`;});}
-refresh();document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});setInterval(refresh,60000);
-</script>

@@ -1,7 +1,15 @@
 ---
 title: "満月に、ひと月を振り返る"
 description: "できたことも、心に残ったことも。満月を節目に、ノートで振り返り、手放したい思いを見つめます。"
-category: "FULL MOON"
+slug: "full-moon"
+category: "満月の手放し"
+publishedAt: "2026-09-30"
+updatedAt: "2026-09-30"
+author: "月と手帳"
+image: "lake"
+featured: true
+related: ["journal/prompts", "new-moon"]
+sources: []
 ---
 
 ## できたことを、先に数える
@@ -18,4 +26,4 @@ category: "FULL MOON"
 - これからも続けたい時間は？
 - 少し軽くしておきたい思いは？
 
-[次の満月の情報を確認する](/moon/)
+[手帳に書く問いを探す](/journal/prompts/)
